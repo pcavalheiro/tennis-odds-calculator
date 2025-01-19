@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Odds - Tênis</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #007bff;
+    }
+    label {
+      display: block;
+      font-size: 16px;
+      margin-top: 15px;
+      text-align: left;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f1f1f1;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+    .result h3 {
+      margin: 0 0 10px;
+    }
+    .footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Calculadora de Odds - Tênis (A seguir ao primeiro break do jogo)</h1>
+    <form id="odds-form">
+      <label for="oddA">Odd Inicial do Jogador A:</label>
+      <input type="number" id="oddA" step="0.01" placeholder="Ex: 1.80" required>
+
+      <label for="oddB">Odd Inicial do Jogador B:</label>
+      <input type="number" id="oddB" step="0.01" placeholder="Ex: 2.10" required>
+
+      <button type="button" id="calculate-button">Calcular</button>
+    </form>
+
+    <div id="result" class="result" style="display: none;">
+      <h3>Resultados:</h3>
+      <p><strong>Jogador A:</strong> Odd Ajustada: <span id="oddA-result"></span></p>
+      <p><strong>Jogador B:</strong> Odd Ajustada: <span id="oddB-result"></span></p>
+    </div>
+    <div class="footer">Feito com 💙 para simplificar cálculos de tênis.</div>
+  </div>
+
+  <script>
+    document.getElementById('calculate-button').addEventListener('click', function() {
+      // Capturar os valores inseridos
+      const oddA = parseFloat(document.getElementById('oddA').value);
+      const oddB = parseFloat(document.getElementById('oddB').value);
+
+      if (isNaN(oddA) || isNaN(oddB) || oddA <= 0 || oddB <= 0) {
+        alert('Por favor, insira odds válidas para ambos os jogadores.');
+        return;
+      }
+
+      // Converter odds para probabilidades
+      const probA = 1 / oddA;
+      const probB = 1 / oddB;
+
+      // Ajustar as probabilidades após o break
+      const advantage = 0.15; // Vantagem de 15% para quem quebrou
+      const probBPostBreak = probB + advantage;
+      const probAPostBreak = 1 - probBPostBreak;
+
+      // Converter de volta para odds
+      const oddAPostBreak = (1 / probAPostBreak).toFixed(2);
+      const oddBPostBreak = (1 / probBPostBreak).toFixed(2);
+
+      // Exibir os resultados
+      document.getElementById('oddA-result').textContent = oddAPostBreak;
+      document.getElementById('oddB-result').textContent = oddBPostBreak;
+      document.getElementById('result').style.display = 'block';
+    });
+  </script>
+</body>
+</html>
