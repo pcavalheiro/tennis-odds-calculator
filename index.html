@@ -1,130 +1,268 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calculadora de Odds - Tênis</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Arial', sans-serif;
+    * {
       margin: 0;
       padding: 0;
-      background-color: #f8f9fa;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f9;
       color: #333;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      padding: 20px;
     }
+
     .container {
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 30px 40px;
       width: 100%;
       max-width: 500px;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       text-align: center;
     }
+
     h1 {
-      font-size: 24px;
+      color: #3498db;
       margin-bottom: 20px;
-      color: #007bff;
+      font-size: 24px;
     }
-    label {
-      display: block;
+
+    .description {
       font-size: 16px;
-      margin-top: 15px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 16px;
+      color: #555;
+      text-align: left;
+      margin-top: 12px;
+      display: block;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      margin-top: 12px;
+    }
+
+    .input-group input[type="number"] {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-top: 8px;
+      transition: border-color 0.3s ease;
+    }
+
+    .input-group input[type="number"]:focus {
+      border-color: #3498db;
+    }
+
+    .checkbox-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .checkbox-container .checkbox {
+      font-size: 24px;
+      cursor: pointer;
+      color: #888;
+      transition: color 0.3s ease;
+    }
+
+    .checkbox-container .checkbox.active {
+      color: #e74c3c; /* Red when active */
+    }
+
+    .checkbox-container .checkbox.inactive {
+      color: #3498db; /* Blue when inactive */
+    }
+
+    .button-container {
+      margin-top: 30px;
+    }
+
+    button {
+      background-color: #3498db;
+      color: white;
+      padding: 12px 20px;
+      font-size: 16px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .result {
+      background-color: #2ecc71;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      display: none;
       text-align: left;
     }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 8px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 16px;
-      box-sizing: border-box;
-    }
-    button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      background: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    button:hover {
-      background: #0056b3;
-    }
-    .result {
-      margin-top: 20px;
-      padding: 15px;
-      background: #f1f1f1;
-      border-radius: 5px;
-      border: 1px solid #ddd;
-    }
+
     .result h3 {
-      margin: 0 0 10px;
+      font-size: 18px;
+      margin-bottom: 10px;
     }
+
+    .result p {
+      font-size: 16px;
+      margin: 5px 0;
+    }
+
     .footer {
-      margin-top: 20px;
       font-size: 12px;
       color: #777;
+      margin-top: 20px;
+    }
+
+    .info-container {
+      background-color: #f39c12;
+      color: #fff;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-size: 14px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Calculadora de Odds - Tênis (A seguir ao primeiro break do jogo)</h1>
+    <h1>Calculadora de Odds - Tênis</h1>
+    <p class="description">Escolha o jogador que quebrou o serviço e calcule a nova odd após o break.</p>
+
     <form id="odds-form">
-      <label for="oddA">Odd Inicial do Jogador A:</label>
-      <input type="number" id="oddA" step="0.01" placeholder="Ex: 1.80" required>
+      <div class="input-group">
+        <label for="oddA">Odd Inicial do Jogador A:</label>
+        <input type="number" id="oddA" step="0.01" value="1.80" placeholder="Ex: 1.80" required>
+      </div>
 
-      <label for="oddB">Odd Inicial do Jogador B:</label>
-      <input type="number" id="oddB" step="0.01" placeholder="Ex: 2.10" required>
+      <div class="input-group">
+        <label for="oddB">Odd Inicial do Jogador B:</label>
+        <input type="number" id="oddB" step="0.01" value="2.10" placeholder="Ex: 2.10" required>
+      </div>
 
-      <button type="button" id="calculate-button">Calcular</button>
+      <div class="checkbox-container">
+        <div>
+          <i class="fas fa-bolt checkbox inactive" id="breakA" title="Jogador A quebrou o serviço"></i>
+          <p>Jogador A</p>
+        </div>
+        <div>
+          <i class="fas fa-bolt checkbox inactive" id="breakB" title="Jogador B quebrou o serviço"></i>
+          <p>Jogador B</p>
+        </div>
+      </div>
+
+      <div class="button-container">
+        <button type="button" id="calculate-button">Calcular</button>
+      </div>
     </form>
 
-    <div id="result" class="result" style="display: none;">
-      <h3>Resultados:</h3>
+    <div id="result" class="result">
+      <h3>Resultados Ajustados:</h3>
       <p><strong>Jogador A:</strong> Odd Ajustada: <span id="oddA-result"></span></p>
       <p><strong>Jogador B:</strong> Odd Ajustada: <span id="oddB-result"></span></p>
     </div>
+
+    <div class="info-container">
+      <p><strong>Dica:</strong> Se um jogador quebrou o serviço, a sua odd será ajustada para refletir a vantagem!</p>
+    </div>
+
     <div class="footer">Feito com 💙 para simplificar cálculos de tênis.</div>
   </div>
 
   <script>
-    document.getElementById('calculate-button').addEventListener('click', function() {
+    // Lógica para alternar entre os ícones
+    const breakAIcon = document.getElementById('breakA');
+    const breakBIcon = document.getElementById('breakB');
+    const calculateButton = document.getElementById('calculate-button');
+
+    breakAIcon.addEventListener('click', () => toggleBreak('A'));
+    breakBIcon.addEventListener('click', () => toggleBreak('B'));
+
+    function toggleBreak(player) {
+      if (player === 'A') {
+        breakAIcon.classList.toggle('active');
+        breakAIcon.classList.toggle('inactive');
+        breakBIcon.classList.remove('active');
+        breakBIcon.classList.add('inactive');
+      } else if (player === 'B') {
+        breakBIcon.classList.toggle('active');
+        breakBIcon.classList.toggle('inactive');
+        breakAIcon.classList.remove('active');
+        breakAIcon.classList.add('inactive');
+      }
+    }
+
+    calculateButton.addEventListener('click', function() {
       // Capturar os valores inseridos
       const oddA = parseFloat(document.getElementById('oddA').value);
       const oddB = parseFloat(document.getElementById('oddB').value);
+
+      // Verificar se ambos os jogadores e o break foram selecionados
+      const breakA = breakAIcon.classList.contains('active');
+      const breakB = breakBIcon.classList.contains('active');
 
       if (isNaN(oddA) || isNaN(oddB) || oddA <= 0 || oddB <= 0) {
         alert('Por favor, insira odds válidas para ambos os jogadores.');
         return;
       }
 
+      if (!breakA && !breakB) {
+        alert('Selecione qual jogador quebrou o serviço antes de calcular!');
+        return;
+      }
+
       // Converter odds para probabilidades
-      const probA = 1 / oddA;
-      const probB = 1 / oddB;
+      let probA = 1 / oddA;
+      let probB = 1 / oddB;
 
       // Ajustar as probabilidades após o break
-      const advantage = 0.15; // Vantagem de 15% para quem quebrou
-      const probBPostBreak = probB + advantage;
-      const probAPostBreak = 1 - probBPostBreak;
+      const advantage = 0.50; // Vantagem de 50% para quem quebrou
+
+      if (breakA) {
+        probA += advantage; // Jogador A recebe vantagem de 50%
+        probB -= advantage / 2; // Jogador B perde um pouco
+      } else if (breakB) {
+        probB += advantage; // Jogador B recebe vantagem de 50%
+        probA -= advantage / 2; // Jogador A perde um pouco
+      }
+
+      // Garantir que as probabilidades não sejam negativas
+      probA = Math.max(probA, 0);
+      probB = Math.max(probB, 0);
 
       // Converter de volta para odds
-      const oddAPostBreak = (1 / probAPostBreak).toFixed(2);
-      const oddBPostBreak = (1 / probBPostBreak).toFixed(2);
+      const newOddA = (1 / probA).toFixed(2);
+      const newOddB = (1 / probB).toFixed(2);
 
       // Exibir os resultados
-      document.getElementById('oddA-result').textContent = oddAPostBreak;
-      document.getElementById('oddB-result').textContent = oddBPostBreak;
+      document.getElementById('oddA-result').textContent = newOddA;
+      document.getElementById('oddB-result').textContent = newOddB;
       document.getElementById('result').style.display = 'block';
     });
   </script>
