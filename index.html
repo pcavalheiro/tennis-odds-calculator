@@ -205,66 +205,71 @@
     breakBIcon.addEventListener('click', () => toggleBreak('B'));
 
     function toggleBreak(player) {
-      if (player === 'A') {
-        breakAIcon.classList.toggle('active');
-        breakAIcon.classList.toggle('inactive');
-        breakBIcon.classList.remove('active');
-        breakBIcon.classList.add('inactive');
-      } else if (player === 'B') {
-        breakBIcon.classList.toggle('active');
-        breakBIcon.classList.toggle('inactive');
-        breakAIcon.classList.remove('active');
-        breakAIcon.classList.add('inactive');
-      }
+        if (player === 'A') {
+            breakAIcon.classList.toggle('active');
+            breakAIcon.classList.toggle('inactive');
+            breakBIcon.classList.remove('active');
+            breakBIcon.classList.add('inactive');
+        } else if (player === 'B') {
+            breakBIcon.classList.toggle('active');
+            breakBIcon.classList.toggle('inactive');
+            breakAIcon.classList.remove('active');
+            breakAIcon.classList.add('inactive');
+        }
     }
 
     calculateButton.addEventListener('click', function() {
-      // Capturar os valores inseridos
-      const oddA = parseFloat(document.getElementById('oddA').value);
-      const oddB = parseFloat(document.getElementById('oddB').value);
+        // Capturar os valores inseridos
+        const oddA = parseFloat(document.getElementById('oddA').value);
+        const oddB = parseFloat(document.getElementById('oddB').value);
 
-      // Verificar se ambos os jogadores e o break foram selecionados
-      const breakA = breakAIcon.classList.contains('active');
-      const breakB = breakBIcon.classList.contains('active');
+        // Verificar se ambos os jogadores e o break foram selecionados
+        const breakA = breakAIcon.classList.contains('active');
+        const breakB = breakBIcon.classList.contains('active');
 
-      if (isNaN(oddA) || isNaN(oddB) || oddA <= 0 || oddB <= 0) {
-        alert('Por favor, insira odds válidas para ambos os jogadores.');
-        return;
-      }
+        if (isNaN(oddA) || isNaN(oddB) || oddA <= 0 || oddB <= 0) {
+            alert('Por favor, insira odds válidas para ambos os jogadores.');
+            return;
+        }
 
-      if (!breakA && !breakB) {
-        alert('Selecione qual jogador quebrou o serviço antes de calcular!');
-        return;
-      }
+        if (!breakA && !breakB) {
+            alert('Selecione qual jogador quebrou o serviço antes de calcular!');
+            return;
+        }
 
-      // Converter odds para probabilidades
-      let probA = 1 / oddA;
-      let probB = 1 / oddB;
+        // Função para ajustar a odd de acordo com o break
+        function adjustOdd(odd, breakOccurred) {
+            if (breakOccurred) {
+                // Reduzir a odd do jogador que quebrou (50% da parte fracionária)
+                const integerPart = Math.floor(odd);
+                const fractionalPart = odd - integerPart;
+                const newFractionalPart = fractionalPart / 2;
+                return (integerPart + newFractionalPart).toFixed(2);
+            }
+            return odd.toFixed(2);
+        }
 
-      // Ajustar as probabilidades após o break
-      const advantage = 0.50; // Vantagem de 50% para quem quebrou
+        // Ajustar as odds dos jogadores após o break
+        let newOddA = oddA;
+        let newOddB = oddB;
 
-      if (breakA) {
-        probA += advantage; // Jogador A recebe vantagem de 50%
-        probB -= advantage / 2; // Jogador B perde um pouco
-      } else if (breakB) {
-        probB += advantage; // Jogador B recebe vantagem de 50%
-        probA -= advantage / 2; // Jogador A perde um pouco
-      }
+        if (breakA) {
+            newOddA = adjustOdd(oddA, true);
+            newOddB = (oddB * 1.20).toFixed(2); // Jogador B tem sua odd aumentada
+        } else if (breakB) {
+            newOddB = adjustOdd(oddB, true);
+            newOddA = (oddA * 1.20).toFixed(2); // Jogador A tem sua odd aumentada
+        }
 
-      // Garantir que as probabilidades não sejam negativas
-      probA = Math.max(probA, 0);
-      probB = Math.max(probB, 0);
+        // Garantir que as odds não saiam do intervalo [1.00, 1000]
+        newOddA = Math.min(Math.max(parseFloat(newOddA), 1.00), 1000).toFixed(2);
+        newOddB = Math.min(Math.max(parseFloat(newOddB), 1.00), 1000).toFixed(2);
 
-      // Converter de volta para odds
-      const newOddA = (1 / probA).toFixed(2);
-      const newOddB = (1 / probB).toFixed(2);
-
-      // Exibir os resultados
-      document.getElementById('oddA-result').textContent = newOddA;
-      document.getElementById('oddB-result').textContent = newOddB;
-      document.getElementById('result').style.display = 'block';
+        // Exibir os resultados
+        document.getElementById('oddA-result').textContent = newOddA;
+        document.getElementById('oddB-result').textContent = newOddB;
+        document.getElementById('result').style.display = 'block';
     });
-  </script>
+</script>
 </body>
 </html>
