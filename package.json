@@ -1,0 +1,19 @@
+{
+  "name": "tennis-odds-predictor",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "parcel public/index.html --port 3000",
+    "build": "parcel build public/index.html"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "react": "^19.0.0",
+    "react-bootstrap": "^2.10.7",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "parcel": "^2.13.3",
+    "process": "^0.11.10"
+  }
+}
